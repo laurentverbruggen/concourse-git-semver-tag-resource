@@ -3,7 +3,7 @@
 A resource for managing a version number on a git repository by using tags.
 
 Conceptually it is based on the [concourse semver resource](https://github.com/concourse/semver-resource) but there is only git and it is focused on tags instead of a file in the repository.
-Also versioning semantics are base
+Also versioning semantics are based [npm semver](https://github.com/npm/node-semver) which has a slightly different API.
 
 ## Installing
 
