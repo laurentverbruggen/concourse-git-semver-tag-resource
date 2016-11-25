@@ -81,8 +81,7 @@ the `final` version ahead of time when building artifacts.
 
 #### Parameters
 
-* `bump` and `pre`: *Optional.* See [Version Bumping
-  Semantics](#version-bumping-semantics).
+* `bump` and `pre`: *Optional.* See [Version Bumping Semantics](#version-bumping-semantics).
 
 Note that `bump` and `pre` don't update the version resource - they just
 modify the version that gets provided to the build. An output must be
@@ -106,8 +105,7 @@ One of the following must be specified:
 
 * `file`: *Optional.* Path to a file containing the version number to set.
 
-* `bump` and `pre`: *Optional.* See [Version Bumping
-  Semantics](#version-bumping-semantics).
+* `bump` and `pre`: *Optional.* See [Version Bumping Semantics](#version-bumping-semantics).
 
 When `bump` and/or `pre` are used, the version bump will be applied atomically.
 
