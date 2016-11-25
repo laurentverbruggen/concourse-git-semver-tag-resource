@@ -3,7 +3,7 @@
 A resource for managing a version number on a git repository by using tags.
 
 Conceptually it is based on the [concourse semver resource](https://github.com/concourse/semver-resource) but there is only git and it is focused on tags instead of a file in the repository.
-Also versioning semantics are based [npm semver](https://github.com/npm/node-semver) which has a slightly different API.
+It also allows auto bump versioning based on git commit messages.
 
 ## Installing
 
@@ -115,29 +115,19 @@ When `bump` and/or `pre` are used, the version bump will be applied atomically.
 ## Version Bumping Semantics
 
 Both `in` and `out` support bumping the version semantically via two params: `bump` and `pre`.
-These values map to increment level and identifier as defined by [npm semver](https://github.com/npm/node-semver) command utility.
 
-* `bump`: *Optional.* Bump the version number semantically. Some examples:
+* `bump`: *Optional (default: patch).* Bump the version number semantically. The value must
+be one of:
 
-  * regular
+  * `major`: Bump the major version number, e.g. `1.0.0` -> `2.0.0`.
+  * `minor`: Bump the minor version number, e.g. `0.1.0` -> `0.2.0`.
+  * `patch`: Bump the patch version number, e.g. `0.0.1` -> `0.0.2`.
+  * `auto`: analyse commit messages between HEAD and current version number. Bump the minor version number by default except if the commits contain the following (both is not possible):
+    * `[breaking]`: Bump the major version number
+    * `[patch]`: Bump the patch version number
 
-    * `major`: Bump the major version number, e.g. `1.5.0` -> `2.0.0`.
-    * `minor`: Bump the minor version number, e.g. `0.1.1` -> `0.2.0`.
-    * `patch`: Bump the patch version number, e.g. `0.0.1` -> `0.0.2`.
-    
-  * pre release
+  Note: if the current version is a `pre` version and `pre` is not defined then any of the above will result in a final release, e.g. `1.0.0-rc.1` -> `1.0.0`
 
-    * `prerelease`: Bump to a prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
-    * `premajor`: Bump the major prereleaseversion number, e.g. `1.5.0` -> `2.0.0-0`.
-    * `preminor`: Bump the minor prereleaseversion number, e.g. `0.1.1` -> `0.2.0-0`.
-    * `prepatch`: Bump the patch prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
-   
-  * nothing/leave empty: Promote the version to a final version, e.g. `1.0.0-rc.1` -> `1.0.0`.
+* `pre`: *Optional.* When bumping, bump to a prerelease (e.g. `rc` or `alpha`), or bump an existing prerelease.
 
-* `pre`: *Optional.* When bumping to a prerelease add an identifier, e.g. `rc` or
-`alpha`. Some examples for pre alpha:
-
-  * `prerelease`: Bump to a prerelease version number, e.g. `0.0.1` -> `0.0.2-alpha.0`.
-  * `premajor`: Bump the major prereleaseversion number, e.g. `1.5.0` -> `2.0.0-alpha.0`.
-  * `preminor`: Bump the minor prereleaseversion number, e.g. `0.1.1` -> `0.2.0-alpha.0`.
-  * `prepatch`: Bump the patch prerelease version number, e.g. `0.0.1` -> `0.0.2-alpha.0`.
+If present, and the version is already a prerelease matching this value, its number is bumped. If the version is already a prerelease of another type, (e.g. `alpha` vs. `beta`), the type is switched and the prerelease version is reset to `0`. If the version is *not* already a pre-release, then `pre` is added, starting at `0`.

@@ -113,6 +113,10 @@ bump_version() {
     fi
   fi
 
+  if [ -n "$pre" ]; then
+    bump="pre$bump"
+  fi
+
   # calculate next version
   semver "$version" -i "$bump" --preid "$pre"
 }
