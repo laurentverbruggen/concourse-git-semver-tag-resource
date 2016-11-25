@@ -119,16 +119,20 @@ These values map to increment level and identifier as defined by [npm semver](ht
 
 * `bump`: *Optional.* Bump the version number semantically. Some examples:
 
-  * `major`: Bump the major version number, e.g. `1.5.0` -> `2.0.0`.
-  * `minor`: Bump the minor version number, e.g. `0.1.1` -> `0.2.0`.
-  * `patch`: Bump the patch version number, e.g. `0.0.1` -> `0.0.2`.
+  * regular
 
-  * `prerelease`: Bump to a prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
-  * `premajor`: Bump the major prereleaseversion number, e.g. `1.5.0` -> `2.0.0-0`.
-  * `preminor`: Bump the minor prereleaseversion number, e.g. `0.1.1` -> `0.2.0-0`.
-  * `prepatch`: Bump the patch prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
-  
-  * nothing: Promote the version to a final version, e.g. `1.0.0-rc.1` -> `1.0.0`.
+    * `major`: Bump the major version number, e.g. `1.5.0` -> `2.0.0`.
+    * `minor`: Bump the minor version number, e.g. `0.1.1` -> `0.2.0`.
+    * `patch`: Bump the patch version number, e.g. `0.0.1` -> `0.0.2`.
+    
+  * pre release
+
+    * `prerelease`: Bump to a prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
+    * `premajor`: Bump the major prereleaseversion number, e.g. `1.5.0` -> `2.0.0-0`.
+    * `preminor`: Bump the minor prereleaseversion number, e.g. `0.1.1` -> `0.2.0-0`.
+    * `prepatch`: Bump the patch prerelease version number, e.g. `0.0.1` -> `0.0.2-0`.
+   
+  * nothing/leave empty: Promote the version to a final version, e.g. `1.0.0-rc.1` -> `1.0.0`.
 
 * `pre`: *Optional.* When bumping to a prerelease add an identifier, e.g. `rc` or
 `alpha`. Some examples for pre alpha:
