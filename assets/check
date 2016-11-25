@@ -33,5 +33,5 @@ else
     result+=" | . + [{ number: \"$tag\" }]"
   done <<< "$tags"
 
-  jq -n "$result | reverse" >&3
+  jq -n "$result" >&3
 fi
