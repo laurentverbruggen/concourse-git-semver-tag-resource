@@ -59,9 +59,12 @@ jq -n "{
   version: {
     number: \"$version\"
   },
-  metadata: {
-    number: \"$version\"
-  }
+  metadata: [
+    {
+      name: \"number\",
+      value: \"$version\"
+    }
+  ]
 }" >&3
 
 # cleanup
