@@ -29,10 +29,14 @@ prepare_repository "$destination" "$payload"
 
 # bump version according to provided strategy (no strategy will simply return input version)
 bump_version "$input_version" "$payload" > "$destination/number"
+log "Version $(cat "$destination/number") written to file: <resource>/number"
+
+metadata=""
+if [ -n "$input_version" ]; then
+  metadata="{ name: \"number\", value: \"$input_version\" }"
+fi
 
 jq -n "{
   version: $(jq '.version' < "$payload"),
-  metadata: {
-    number: \"$input_version\"
-  }
+  metadata: [ $metadata ]
 }" >&3

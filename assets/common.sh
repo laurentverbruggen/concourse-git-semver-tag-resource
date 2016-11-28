@@ -96,16 +96,19 @@ bump_version() {
   }
 
   if [ "$bump" == "auto" ]; then
+    log "Scanning commits for [breaking] or [patch] to auto bump current version $version"
     # analyse commits and if it contains [breaking] or [patch] switch the bump level, default is minor
     bump="minor"
     messages=$(git log --pretty=%s $version..HEAD 2>/dev/null)
     if [ -n "$messages" ]; then
       while read message; do
         if echo "$message" | grep -Ec "\[breaking\]" > /dev/null; then
+          log "Found breaking commit message: $message"
           if [ "$bump" == "patch" ]; then error_patch_breaking; fi
           bump="major"
         fi
         if echo "$message" | grep -Ec "\[patch\]" > /dev/null; then
+          log "Found patch commit message: $message"
           if [ "$bump" == "major" ]; then error_patch_breaking; fi
           bump="patch"
         fi
@@ -118,5 +121,6 @@ bump_version() {
   fi
 
   # calculate next version
+  log "Bumping version $version with level '$bump' (and preid '$pre')"
   semver "$version" -i "$bump" --preid "$pre"
 }
