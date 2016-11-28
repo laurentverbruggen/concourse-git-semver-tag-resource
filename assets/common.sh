@@ -78,9 +78,12 @@ prepare_repository() {
   fi
 
   cd "$destination"
+
   # first remove all local tags, only remote tags are refetched later
   git tag -l | xargs git tag -d
-  git fetch --tags --all --prune
+  git fetch --tags
+
+  git fetch --prune
   git reset --hard FETCH_HEAD
 }
 
@@ -101,7 +104,7 @@ bump_version() {
     log "Scanning commits for [breaking] or [patch] to auto bump current version $version"
     # analyse commits and if it contains [breaking] or [patch] switch the bump level, default is minor
     bump="minor"
-    messages=$(git log --pretty=%s $version..HEAD 2>/dev/null)
+    messages=$(git log --pretty=%s $version..HEAD)
     if [ -n "$messages" ]; then
       while read message; do
         if echo "$message" | grep -Ec "\[breaking\]" > /dev/null; then
