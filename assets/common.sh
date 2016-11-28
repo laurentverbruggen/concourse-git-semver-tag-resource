@@ -104,7 +104,7 @@ bump_version() {
     log "Scanning commits for [breaking] or [patch] to auto bump current version $version"
     # analyse commits and if it contains [breaking] or [patch] switch the bump level, default is minor
     bump="minor"
-    messages=$(git log --pretty=%s $version..HEAD)
+    messages=$(git log --pretty=%s $version..HEAD 2>/dev/null | cat)
     if [ -n "$messages" ]; then
       while read message; do
         if echo "$message" | grep -Ec "\[breaking\]" > /dev/null; then
@@ -118,6 +118,8 @@ bump_version() {
           bump="patch"
         fi
       done <<< "$messages"
+    else
+      log "No messages found between $version..HEAD"
     fi
   fi
 
