@@ -78,7 +78,9 @@ prepare_repository() {
   fi
 
   cd "$destination"
-  git fetch --all --prune
+  # first remove all local tags, only remote tags are refetched later
+  git tag -l | xargs git tag -d
+  git fetch --tags --all --prune
   git reset --hard FETCH_HEAD
 }
 

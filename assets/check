@@ -24,7 +24,7 @@ prepare_repository "$destination" "$payload"
 branch=$(jq -r '.source.branch // ""' < "$payload")
 tags=$(git tag --merged "$branch" 2>/dev/null)
 
-if [ $? -ne 0 ]; then
+if [ -z "$tags" ]; then
   initial_version=$(jq -r '.source.initial_version // "0.0.0"' < "$payload")
   jq -n "[{ number: \"$initial_version\" }]" >&3
 else
