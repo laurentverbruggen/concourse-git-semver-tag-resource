@@ -124,10 +124,17 @@ bump_version() {
   fi
 
   if [ -n "$pre" ]; then
+    if [ -z "$bump" ]; then
+      bump="release"
+    fi
     bump="pre$bump"
   fi
 
   # calculate next version
-  log "Bumping version $version with level '$bump' (and preid '$pre')"
-  semver "$version" -i "$bump" --preid "$pre"
+  if [ -n "$bump" ]; then
+    log "Bumping version $version with level '$bump' (and preid '$pre')"
+    semver "$version" -i "$bump" --preid "$pre"
+  else
+    log "Skipping bump because no bump level is defined"
+  fi
 }
