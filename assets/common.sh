@@ -136,5 +136,6 @@ bump_version() {
     semver "$version" -i "$bump" --preid "$pre"
   else
     log "Skipping bump because no bump level is defined"
+    echo "$version"
   fi
 }
