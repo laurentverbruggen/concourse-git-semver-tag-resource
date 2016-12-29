@@ -40,7 +40,7 @@ if [ -n "$version_file" ]; then
 else
   # return latest tag on this branch
   branch=$(jq -r '.source.branch // ""' < "$payload")
-  latest_tag=$(git tag --merged "$branch" 2>/dev/null | tail -1)
+  latest_tag=$(git tag --merged "$branch" -l --sort=version:refname "*" 2>/dev/null | tail -1)
 
   # use initial version if there aren't any tags yet
   if [ -z "$latest_tag" ]; then
