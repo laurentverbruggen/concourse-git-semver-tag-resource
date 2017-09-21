@@ -1,11 +1,12 @@
-FROM gliderlabs/alpine:3.4
+FROM alpine
 
 RUN apk --update add \
   ca-certificates \
   bash \
   jq \
   nodejs \
-  git
+  git \
+  openssh
 
 RUN npm install -g semver
 
