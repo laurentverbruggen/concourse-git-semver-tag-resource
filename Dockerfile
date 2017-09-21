@@ -5,6 +5,7 @@ RUN apk --update add \
   bash \
   jq \
   nodejs \
+  nodejs-npm \
   git \
   openssh
 
