@@ -91,9 +91,9 @@ sorted_tags() {
   # return only those tags that are recognised by semver as versions
   local branch="$1"
   NODE_PATH=/usr/lib/node_modules node -e '
-  var semver=require("semver");
-  var versions=process.argv.slice(1);
-  versions.filter(semver.valid)
+    var semver=require("semver");
+    var versions=process.argv.slice(1);
+    versions.filter(semver.valid)
       .sort(function(a, b) {return semver.compare(a, b);})
       .forEach(function(x) {console.log(x)});
   ' $(git tag --merged "$branch" -l "*" 2>/dev/null)
