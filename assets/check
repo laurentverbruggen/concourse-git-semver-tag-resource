@@ -22,7 +22,8 @@ prepare_repository "$destination" "$payload"
 
 # return latest tag on this branch
 branch=$(jq -r '.source.branch // ""' < "$payload")
-tags=$(git tag --merged "$branch" -l --sort=version:refname "*" 2>/dev/null)
+tag_prefix=$(jq -r '.source.tag_prefix // ""' < "$payload")
+tags=$(git tag --merged "$branch" -l --sort=version:refname "${tag_prefix}*" 2>/dev/null)
 
 if [ -z "$tags" ]; then
   initial_version=$(jq -r '.source.initial_version // "0.0.0"' < "$payload")
@@ -30,7 +31,8 @@ if [ -z "$tags" ]; then
 else
   result="[]"
   while read tag; do
-    result+=" | . + [{ number: \"$tag\" }]"
+    tag_version=$(grep -Po "^${tag_prefix}\K.*$" <<<"${tag}")
+    result+=" | . + [{ number: \"${tag_version}\" }]"
   done <<< "$tags"
 
   jq -n "$result" >&3

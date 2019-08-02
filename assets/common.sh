@@ -94,9 +94,10 @@ bump_version() {
   # build a file containing the correct tag based on a provided strategy (see README for versioning semantics)
   bump=$(jq -r '.params.bump // ""' < "$payload")
   pre=$(jq -r '.params.pre // ""' < "$payload")
+  tag_prefix=$(jq -r '.source.tag_prefix // ""' < "$payload")
 
   error_patch_breaking() {
-    log "You can't have breaking changes for a patch! Commits for both are included in $version..$(git rev-parse HEAD)"
+    log "You can't have breaking changes for a patch! Commits for both are included in ${tag_prefix}${version}..$(git rev-parse HEAD)"
     exit 1
   }
 
@@ -104,7 +105,7 @@ bump_version() {
     log "Scanning commits for [breaking] or [patch] to auto bump current version $version"
     # analyse commits and if it contains [breaking] or [patch] switch the bump level, default is minor
     bump="minor"
-    messages=$(git log --pretty=%s $version..HEAD 2>/dev/null | cat)
+    messages=$(git log --pretty=%s ${tag_prefix}${version}..HEAD 2>/dev/null | cat)
     if [ -n "$messages" ]; then
       while read message; do
         if echo "$message" | grep -Ec "\[breaking\]" > /dev/null; then
@@ -119,7 +120,7 @@ bump_version() {
         fi
       done <<< "$messages"
     else
-      log "No messages found between $version..HEAD"
+      log "No messages found between ${tag_prefix}${version}..HEAD"
     fi
   fi
 
