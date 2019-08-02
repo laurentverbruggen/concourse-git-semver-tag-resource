@@ -27,6 +27,7 @@ cat > $payload <&0
 prepare_repository "$destination" "$payload"
 
 version_file=$(jq -r '.params.file // ""' < "$payload")
+tag_prefix=$(jq -r '.source.tag_prefix // ""' < "$payload")
 
 if [ -n "$version_file" ]; then
 
@@ -40,20 +41,21 @@ if [ -n "$version_file" ]; then
 else
   # return latest tag on this branch
   branch=$(jq -r '.source.branch // ""' < "$payload")
-  latest_tag=$(git tag --merged "$branch" -l --sort=version:refname "*" 2>/dev/null | tail -1)
+  latest_tag=$(git tag --merged "$branch" -l --sort=version:refname "${tag_prefix}*" 2>/dev/null | tail -1)
   log "Latest tag is $latest_tag"
 
   # use initial version if there aren't any tags yet
   if [ -z "$latest_tag" ]; then
-    latest_tag=$(jq -r '.source.initial_version // "0.0.0"' < "$payload")
+    latest_tag="${tag_prefix}$(jq -r '.source.initial_version // "0.0.0"' < "$payload")"
   fi
 
   # bump version according to provided strategy (no strategy will simply return input version)
-  version=$(bump_version "$latest_tag" "$payload")
+  latest_version=$(grep -Po "^${tag_prefix}\K.*$" <<<"${latest_tag}")
+  version=$(bump_version "$latest_version" "$payload")
 fi
 
 # set the tag for the new version on the HEAD commit
-git tag "$version"
+git tag "${tag_prefix}${version}"
 git push --tags
 
 jq -n "{

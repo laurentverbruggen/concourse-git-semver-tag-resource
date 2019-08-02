@@ -21,6 +21,8 @@ resource_types:
 
 * `initial_version`: *Optional (default: 0.0.0).* The version number to use when bootstrapping, i.e. when there is not a version number present (no tag yet) in the source.
 
+* `tag_prefix`: *Optional.* A prefix to use when constructing a tag from a version. e.g. Use `tag_prefix: v` to record the version `1.2.3` as tag `v1.2.3` and only read tags starting with `v`
+
 * `uri`: *Required.* The repository URL.
 
 * `branch`: *Required.* The branch all tags were made on.
