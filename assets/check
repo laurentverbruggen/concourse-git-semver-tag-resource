@@ -22,7 +22,7 @@ prepare_repository "$destination" "$payload"
 
 # return latest tag on this branch
 branch=$(jq -r '.source.branch // ""' < "$payload")
-tags=$(git tag --merged "$branch" -l --sort=version:refname "*" 2>/dev/null)
+tags=$(git tag --merged "$branch" -l 2>/dev/null | semver_sort)
 
 if [ -z "$tags" ]; then
   initial_version=$(jq -r '.source.initial_version // "0.0.0"' < "$payload")

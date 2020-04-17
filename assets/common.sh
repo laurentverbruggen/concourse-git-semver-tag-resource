@@ -139,3 +139,8 @@ bump_version() {
     echo "$version"
   fi
 }
+
+# semver_sort: https://stackoverflow.com/a/40391207/3262881
+semver_sort() {
+  sed '/-/!{s/$/_/}' | sort -V | sed 's/_$//'
+}
